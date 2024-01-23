@@ -11,8 +11,6 @@ services:
 
   mongodb:
     image: mongo:latest
-    ports:
-      - "27017:27017" # Expose port 27017 on the host and map it to port 27017 in the container
     volumes:
       - mongodb_data:/data/db
 
