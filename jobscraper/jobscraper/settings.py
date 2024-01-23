@@ -90,8 +90,10 @@ ITEM_PIPELINES = {
     # "jobscraper.pipelines.JobscraperPostgresPipeline": 300,
     "jobscraper.pipelines.JobscraperMongoPipeline": 300,
 }
+import os
 
-MONGODB_HOSTNAME = "localhost"
+# MONGODB_HOSTNAME = "localhost"
+MONGODB_HOSTNAME = os.environ["MONGO_URI"]
 MONGODB_PORT = 27017
 MONGODB_DBATABASE = "jobs_db"
 MONGODB_COLLECTION = "jobs"

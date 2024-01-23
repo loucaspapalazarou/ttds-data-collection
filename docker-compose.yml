@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  scrapyapp:
+    build: .
+    volumes:
+      - .:/usr/src/app  # Mount the current directory to the container
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017  # Use the service name `mongodb` as the host
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017" # Expose port 27017 on the host and map it to port 27017 in the container
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:  # Named volume for persisting MongoDB data
