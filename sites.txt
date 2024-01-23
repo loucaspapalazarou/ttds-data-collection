@@ -1,0 +1,16 @@
+todo
+----
+https://www.jobbank.gc.ca/
+https://www.jobs.ac.uk/
+https://www.cv-library.co.uk/
+
+done
+----
+https://www.jobs24.co.uk/jobs
+https://www.s1jobs.com/jobs
+
+blocked
+----
+https://www.totaljobs.com/jobs
+https://findajob.dwp.gov.uk/search
+https://www.reed.co.uk/jobs
