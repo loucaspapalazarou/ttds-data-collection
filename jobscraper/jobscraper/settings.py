@@ -6,6 +6,7 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import os
 
 BOT_NAME = "jobscraper"
 
@@ -38,7 +39,7 @@ USER_AGENTS = [
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 64
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -90,9 +91,7 @@ ITEM_PIPELINES = {
     # "jobscraper.pipelines.JobscraperPostgresPipeline": 300,
     "jobscraper.pipelines.JobscraperMongoPipeline": 300,
 }
-import os
 
-# MONGODB_HOSTNAME = "localhost"
 MONGODB_HOSTNAME = os.environ["MONGO_URI"]
 MONGODB_PORT = 27017
 MONGODB_DBATABASE = "jobs_db"
