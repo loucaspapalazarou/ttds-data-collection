@@ -82,5 +82,12 @@ class JobscraperMongoPipeline:
         self.collection = db[settings.get("MONGODB_COLLECTION")]
 
     def process_item(self, item, spider):
-        self.collection.insert_one(dict(item))
+        # Prepare the filter and update document
+        filter_doc = {"id": item["id"]}  # Assuming 'id' is the field in item
+        update_doc = {"$setOnInsert": dict(item)}  # Fields to set on insert
+
+        # Update the collection, insert if the id does not exist
+        self.collection.update_one(
+            filter_doc, update_doc, upsert=True  # Ensures insert if not exists
+        )
         return item
