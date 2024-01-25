@@ -6,51 +6,37 @@
 import scrapy
 from itemloaders.processors import MapCompose, TakeFirst
 from w3lib.html import remove_tags
-from .utils import s1jobs_jobs24, cvlibrary
+from .utils import jobs24, cvlibrary
 
 
-class S1JobsAndJobs24Item(scrapy.Item):
+class Jobs24Item(scrapy.Item):
+    id = scrapy.Field(
+        input_processor=MapCompose(jobs24.url_to_id),
+        output_processor=TakeFirst(),
+    )
     link = scrapy.Field(
         output_processor=TakeFirst(),
     )
     title = scrapy.Field(
-        input_processor=MapCompose(remove_tags, s1jobs_jobs24.clean_data),
+        input_processor=MapCompose(remove_tags, jobs24.clean_data),
         output_processor=TakeFirst(),
     )
     company = scrapy.Field(
-        input_processor=MapCompose(remove_tags, s1jobs_jobs24.clean_data),
+        input_processor=MapCompose(remove_tags, jobs24.clean_data),
         output_processor=TakeFirst(),
     )
     description = scrapy.Field(
         input_processor=MapCompose(
-            lambda x: remove_tags(x, keep=["br", "p"]), s1jobs_jobs24.clean_data
+            lambda x: remove_tags(x, keep=["br", "p"]), jobs24.clean_data
         ),
         output_processor=TakeFirst(),
     )
     date_posted = scrapy.Field(
         input_processor=MapCompose(
-            remove_tags, s1jobs_jobs24.clean_data, s1jobs_jobs24.string_to_date
+            remove_tags, jobs24.clean_data, jobs24.string_to_date
         ),
         output_processor=TakeFirst(),
     )
-
-
-class Jobs24Item(S1JobsAndJobs24Item):
-    id = scrapy.Field(
-        input_processor=MapCompose(s1jobs_jobs24.mark_jobs24),
-        output_processor=TakeFirst(),
-    )
-
-
-class S1JobsItem(S1JobsAndJobs24Item):
-    id = scrapy.Field(
-        input_processor=MapCompose(s1jobs_jobs24.mark_s1jobs),
-        output_processor=TakeFirst(),
-    )
-
-
-class TotalJobsItem(scrapy.Item):
-    pass
 
 
 class CVLibraryItem(scrapy.Item):

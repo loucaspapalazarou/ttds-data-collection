@@ -2,12 +2,14 @@ todo
 ----
 https://www.jobbank.gc.ca/
 https://www.jobs.ac.uk/
-https://www.cv-library.co.uk/
+
 
 done
 ----
 https://www.jobs24.co.uk/jobs
-https://www.s1jobs.com/jobs
+and all associated with it
+
+https://www.cv-library.co.uk/
 
 blocked
 ----
