@@ -36,7 +36,7 @@ USER_AGENTS = [
 # USER_AGENT = "jobscraper (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 CONCURRENT_REQUESTS = 32
@@ -88,7 +88,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "jobscraper.pipelines.JobscraperMongoPipeline": 300,
+    # "jobscraper.pipelines.JobscraperMongoPipeline": 300,
 }
 
 MONGODB_HOSTNAME = os.environ.get("MONGO_URI", "")
