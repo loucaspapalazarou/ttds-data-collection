@@ -4,21 +4,18 @@ from ..items import CVLibraryItem
 from scrapy.loader import ItemLoader
 
 
-class CvlibrarySpider(CrawlSpider):
+class CVLibrarySpider(CrawlSpider):
     name = "cvlibrary"
     allowed_domains = ["www.cv-library.co.uk"]
     start_urls = ["https://www.cv-library.co.uk/jobs"]
-
     rules = (
-        Rule(LinkExtractor(allow=(r"page="))),
-        Rule(LinkExtractor(allow=(r"/jobs"))),
-        Rule(LinkExtractor(allow=(r"/job/")), callback="parse_item"),
+        Rule(LinkExtractor(allow=(r"./jobs."))),
+        Rule(
+            LinkExtractor(allow=(r"./job/."), deny=(r"/apply")), callback="parse_item"
+        ),
     )
 
     def parse_item(self, response):
-        # print("\n\n")
-        # print(response.css("span[data-jd-title]::text").get())
-        # print("\n\n")
         l = ItemLoader(item=CVLibraryItem(), response=response)
         l.add_value("id", response.url.split("/")[4])
         l.add_value("link", response.url)

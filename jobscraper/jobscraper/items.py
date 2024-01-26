@@ -45,6 +45,7 @@ class CVLibraryItem(scrapy.Item):
         output_processor=TakeFirst(),
     )
     link = scrapy.Field(
+        input_processor=MapCompose(cvlibrary.clean_link),
         output_processor=TakeFirst(),
     )
     title = scrapy.Field(
