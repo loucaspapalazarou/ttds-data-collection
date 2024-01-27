@@ -1,4 +1,4 @@
-# TTDS Data collection modeule
+# TTDS Data collection module
 
 This module is fully dockerized and stores the data in a local mongodb instance.
 
