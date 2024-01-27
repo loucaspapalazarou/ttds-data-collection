@@ -35,4 +35,4 @@ db.jobs.countDocuments()
 
 Useful scrapy docs to not get blocked: https://docs.scrapy.org/en/latest/topics/practices.html 
 
-Free proxues (not that good): https://api.proxyscrape.com/v3/free-proxy-list/get?request=getproxies
+Free proxies (not that good): https://api.proxyscrape.com/v3/free-proxy-list/get?request=getproxies
