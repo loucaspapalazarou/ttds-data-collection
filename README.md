@@ -35,6 +35,8 @@ Connt the documents
 db.jobs.countDocuments()
 ```
 
+The data collected can be [exported from mongo](https://www.mongodb.com/docs/database-tools/mongoexport/) in various formats and subsequently extracted from the container if needed. 
+
 ### other random notes
 
 Useful scrapy docs to not get blocked: https://docs.scrapy.org/en/latest/topics/practices.html 
