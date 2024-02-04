@@ -62,3 +62,5 @@ docker-compose -f docker-compose-prod.yml up --build
 If you don't want to use `docker` for the production, you can just run `main.py`. Just make sure you have the dependencies installed. 
 
 Now the scraped jobs will be sent to the `mongo` instance.
+
+You can query the database using the [Mongo shell](https://www.mongodb.com/docs/mongodb-shell/) or [Python (pymongo)](https://www.mongodb.com/docs/drivers/pymongo/), or any other way you like.
