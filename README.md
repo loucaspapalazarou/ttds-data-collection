@@ -43,6 +43,8 @@ The production version stores the documents in a `mongodb` instance in a project
 
 ![alt text](docs/create_credentals.png)
 
+You will also need to provide your IP to the mongo instance so it accepts that connection. In the `Security` section, go to `Network Access` and add your IP address.
+
 To connect your local code with mondo you need a `.env` file. Copy the file
 
 ```
@@ -64,3 +66,6 @@ If you don't want to use `docker` for the production, you can just run `main.py`
 Now the scraped jobs will be sent to the `mongo` instance.
 
 You can query the database using the [Mongo shell](https://www.mongodb.com/docs/mongodb-shell/) or [Python (pymongo)](https://www.mongodb.com/docs/drivers/pymongo/), or any other way you like.
+
+### TODO
+1. Make script that auto-deletes data that is older than a certain time, in order to not have outdated data in the db.
