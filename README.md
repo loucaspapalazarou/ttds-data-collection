@@ -1,4 +1,4 @@
-# TTDS Data collection module
+# TTDS Data collection modeule
 
 The repository for the data collection part of the TTDS assignment. 
 
@@ -10,11 +10,7 @@ docker-compose -f docker-compose-<type>.yml build
 ```
 
 and run
-```
-docker-compose up -d
-```
 
-or
 ```
 docker-compose -f docker-compose-<type>.yml up
 ```
@@ -38,8 +34,6 @@ Connt the documents
 ```
 db.jobs.countDocuments()
 ```
-
-The data collected can be [exported from mongo](https://www.mongodb.com/docs/database-tools/mongoexport/) in various formats and subsequently extracted from the container if needed. 
 
 ### Production
 
