@@ -8,6 +8,7 @@
 from itemadapter import ItemAdapter
 import pymongo
 from scrapy.utils.project import get_project_settings
+from pymongo.server_api import ServerApi
 
 
 class JobscraperMongoPipeline:
@@ -16,6 +17,7 @@ class JobscraperMongoPipeline:
         self.connection = pymongo.MongoClient(
             host=settings.get("MONGODB_HOSTNAME"),
             port=settings.get("MONGODB_PORT"),
+            server_api=ServerApi("1"),
         )
         db = self.connection[settings.get("MONGODB_DBATABASE")]
         self.collection = db[settings.get("MONGODB_COLLECTION")]

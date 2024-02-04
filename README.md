@@ -1,17 +1,21 @@
 # TTDS Data collection modeule
 
-This module is fully dockerized and stores the data in a local mongodb instance.
+The repository for the data collection part of the TTDS assignment. 
+
+This repository includes 2 docker-compose files. One for testing, `docker-compose-dev.yml` and one for production `docker-compose-prod`.
 
 Build
 ```
-docker-compose build
+docker-compose -f docker-compose-<type>.yml build
 ```
 
 and run
 
 ```
-docker-compose up
+docker-compose -f docker-compose-<type>.yml up
 ```
+
+## Development
 
 Inspect the stored documents using
 
@@ -31,8 +35,30 @@ Connt the documents
 db.jobs.countDocuments()
 ```
 
-### other random notes
+### Production
 
-Useful scrapy docs to not get blocked: https://docs.scrapy.org/en/latest/topics/practices.html 
+The production version stores the documents in a `mongodb` instance in a project I made. In order to conncet to the production db, you need a `mongo` account, preferably student account, of which I will invite in the project. When you do, message me so I can add your email to the project. When that is done, you will need to create user credentials. To do this, go in the `Security` section of the scrollbar and press `Quickstart`. Then, input your cretentials and create the user.
 
-Free proxies (not that good): https://api.proxyscrape.com/v3/free-proxy-list/get?request=getproxies
+![alt text](docs/create_credentals_quickstart.png)
+
+![alt text](docs/create_credentals.png)
+
+To connect your local code with mondo you need a `.env` file. Copy the file
+
+```
+cp .env.example .env
+```
+
+Replace `<username>` and `<password>` with your credentials
+```
+MONGO_URI=mongodb+srv://<username>:<password>@ttds-cluster.vubotvd.mongodb.net/?retryWrites=true&w=majority
+```
+
+And run the code using:
+```
+docker-compose -f docker-compose-prod.yml up --build
+```
+
+If you don't want to use `docker` for the production, you can just run `main.py`. Just make sure you have the dependencies installed. 
+
+Now the scraped jobs will be sent to the `mongo` instance.

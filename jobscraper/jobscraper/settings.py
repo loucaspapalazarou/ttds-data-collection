@@ -88,7 +88,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    # "jobscraper.pipelines.JobscraperMongoPipeline": 300,
+    "jobscraper.pipelines.JobscraperMongoPipeline": 300,
 }
 
 MONGODB_HOSTNAME = os.environ.get("MONGO_URI", "")

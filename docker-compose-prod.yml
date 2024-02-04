@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  scrapyapp:
+    build: .
+    volumes:
+      - .:/usr/src/app  # Mount the current directory to the container
+    environment:
+      - MONGO_URI=${MONGO_URI}
