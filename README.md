@@ -70,6 +70,7 @@ You can query the database using the [Mongo shell](https://www.mongodb.com/docs/
 ### TODO
 1. Make script that auto-deletes data that is older than a certain time, in order to not have outdated data in the db.
 2. Scrape Eurojobs
+3. Update README with postgres
 
 ### NOTES
 1. europa.eu only allows 10k jobs. The backend api is setup this way

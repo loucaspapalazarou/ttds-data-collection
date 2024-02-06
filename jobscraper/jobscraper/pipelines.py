@@ -6,6 +6,7 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+import os
 import psycopg2
 import pymongo
 from scrapy.utils.project import get_project_settings
@@ -34,17 +35,17 @@ class JobscraperMongoPipeline:
         )
         return item
 
+
 class JobscraperPostgresPipeline:
     def __init__(self) -> None:
-        settings = get_project_settings()
-
         ## Create/Connect to database
         self.connection = psycopg2.connect(
-            host=settings.get("PG_HOSTNAME"),
-            user=settings.get("PG_USERNAME"),
-            password=settings.get("PG_PASSWORD"),
-            dbname=settings.get("PG_DATABASE"),
+            host=os.getenv("POSTGRES_HOST", "localhost"),
+            user=os.getenv("POSTGRES_USER"),
+            password=os.getenv("POSTGRES_PASSWORD"),
+            dbname=os.getenv("POSTGRES_DB"),
         )
+
         self.cur = self.connection.cursor()
 
         self.cur.execute(
