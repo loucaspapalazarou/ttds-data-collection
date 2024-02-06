@@ -6,7 +6,7 @@
 import scrapy
 from itemloaders.processors import MapCompose, TakeFirst
 from w3lib.html import remove_tags
-from .utils import jobs24, cvlibrary
+from .utils import jobs24, cvlibrary,  eurojobs
 
 
 class Jobs24Item(scrapy.Item):
@@ -64,5 +64,32 @@ class CVLibraryItem(scrapy.Item):
     )
     date_posted = scrapy.Field(
         input_processor=MapCompose(remove_tags, cvlibrary.clean_data),
+        output_processor=TakeFirst(),
+    )
+
+
+class EurojobsItem(scrapy.Item):
+    id = scrapy.Field(
+        input_processor=MapCompose(eurojobs.mark_eurojobs),
+        output_processor=TakeFirst(),
+    )
+    link = scrapy.Field(
+        input_processor=MapCompose(),
+        output_processor=TakeFirst(),
+    )
+    title = scrapy.Field(
+        input_processor=MapCompose(remove_tags, eurojobs.clean_title),
+        output_processor=TakeFirst(),
+    )
+    company = scrapy.Field(
+        input_processor=MapCompose(remove_tags, eurojobs.clean_data),
+        output_processor=TakeFirst(),
+    )
+    description = scrapy.Field(
+        input_processor=MapCompose(remove_tags),
+        output_processor=TakeFirst(),
+    )
+    date_posted = scrapy.Field(
+        input_processor=MapCompose(remove_tags),
         output_processor=TakeFirst(),
     )

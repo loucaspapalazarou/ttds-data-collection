@@ -11,13 +11,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 def main():
     process = CrawlerProcess(get_project_settings())
-
-    # Load all spiders using SpiderLoader
-    spider_loader = SpiderLoader.from_settings(process.settings)
-    for spider_name in spider_loader.list():
-        spider_cls = spider_loader.load(spider_name)
-        process.crawl(spider_cls)
-
+    for spider_name in ["jobs24", "eurojobs"]:
+        process.crawl(spider_name)
     process.start()
 
 

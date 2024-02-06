@@ -91,18 +91,20 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "jobscraper.pipelines.JobscraperMongoPipeline": 300,
+    # "jobscraper.pipelines.JobscraperMongoPipeline": 300,
+    "jobscraper.pipelines.JobscraperPostgresPipeline": 300,
 }
 
-MONGODB_HOSTNAME = os.environ.get("MONGO_URI", "")
+MONGODB_HOSTNAME = os.getenv("MONGO_URI", "")
 MONGODB_PORT = 27017
 MONGODB_DBATABASE = "jobs_db"
 MONGODB_COLLECTION = "jobs"
 
-POSTGRES_HOSTNAME = "localhost"
-POSTGRES_USERNAME = "postgres"
-POSTGRES_PASSWORD = "postgres"
-POSTGRES_DATABASE = "jobs"
+PG_HOST = os.getenv("POSTGRES_HOST", "localhost")
+PG_PORT = os.getenv("POSTGRES_PORT", 5432)
+PG_USER = os.getenv("POSTGRES_USER")
+PG_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+PG_DATABASE = os.getenv("POSTGRES_DB")
 
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -130,3 +132,10 @@ POSTGRES_DATABASE = "jobs"
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+
+# playwright
+# DOWNLOAD_HANDLERS = {
+#     "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+#     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+# }
+# TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
