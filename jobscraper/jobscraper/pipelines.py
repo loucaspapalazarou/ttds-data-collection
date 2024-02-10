@@ -56,6 +56,7 @@ class JobscraperPostgresPipeline:
                 title VARCHAR(255),
                 company VARCHAR(255),
                 date_posted VARCHAR(255),
+                location VARCHAR(255),
                 description text
             );
             """
@@ -65,8 +66,8 @@ class JobscraperPostgresPipeline:
     def process_item(self, item, spider):
         # Define insert statement with placeholders for each column
         insert_statement = """
-            INSERT INTO jobs (id, link, title, company, date_posted, description)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO jobs (id, link, title, company, date_posted, location, description)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (id) DO NOTHING;
         """
 
@@ -77,6 +78,7 @@ class JobscraperPostgresPipeline:
             item.get("title", ""),
             item.get("company", ""),
             item.get("date_posted", ""),
+            item.get("location", ""),
             item.get("description", ""),
         )
 

@@ -6,7 +6,7 @@
 import scrapy
 from itemloaders.processors import MapCompose, TakeFirst
 from w3lib.html import remove_tags
-from .utils import jobs24, cvlibrary,  eurojobs
+from .utils import jobs24, cvlibrary, eurojobs
 
 
 class Jobs24Item(scrapy.Item):
@@ -25,15 +25,19 @@ class Jobs24Item(scrapy.Item):
         input_processor=MapCompose(remove_tags, jobs24.clean_data),
         output_processor=TakeFirst(),
     )
-    description = scrapy.Field(
-        input_processor=MapCompose(
-            lambda x: remove_tags(x, keep=["br", "p"]), jobs24.clean_data
-        ),
-        output_processor=TakeFirst(),
-    )
     date_posted = scrapy.Field(
         input_processor=MapCompose(
             remove_tags, jobs24.clean_data, jobs24.string_to_date
+        ),
+        output_processor=TakeFirst(),
+    )
+    location = scrapy.Field(
+        input_processor=MapCompose(jobs24.link_to_location),
+        output_processor=TakeFirst(),
+    )
+    description = scrapy.Field(
+        input_processor=MapCompose(
+            lambda x: remove_tags(x, keep=["br", "p"]), jobs24.clean_data
         ),
         output_processor=TakeFirst(),
     )
@@ -54,6 +58,10 @@ class CVLibraryItem(scrapy.Item):
     )
     company = scrapy.Field(
         input_processor=MapCompose(remove_tags, cvlibrary.clean_data),
+        output_processor=TakeFirst(),
+    )
+    location = scrapy.Field(
+        input_processor=MapCompose(),
         output_processor=TakeFirst(),
     )
     description = scrapy.Field(
@@ -83,6 +91,10 @@ class EurojobsItem(scrapy.Item):
     )
     company = scrapy.Field(
         input_processor=MapCompose(remove_tags, eurojobs.clean_data),
+        output_processor=TakeFirst(),
+    )
+    location = scrapy.Field(
+        input_processor=MapCompose(remove_tags, eurojobs.clean_location),
         output_processor=TakeFirst(),
     )
     description = scrapy.Field(

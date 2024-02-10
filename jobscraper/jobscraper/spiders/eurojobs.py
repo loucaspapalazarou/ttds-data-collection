@@ -22,4 +22,18 @@ class EurojobsSpider(CrawlSpider):
         l.add_css("company", "span.company-name")
         l.add_xpath("date_posted", '//*[@id="col-narrow-right"]/div[3]/div')
         l.add_xpath("description", '//*[@id="col-wide"]/div/div')
+
+        # try to find location
+        for div_num in range(1, 4):
+            try:
+                heading = response.xpath(
+                    f'//*[@id="col-narrow-left"]/div[{div_num}]/h3/text()'
+                ).get()
+                if heading.__contains__("Location"):
+                    location_xpath = f'//*[@id="col-narrow-left"]/div[{div_num}]/div'
+            except Exception:
+                pass
+
+        l.add_xpath("location", location_xpath)
+
         return l.load_item()

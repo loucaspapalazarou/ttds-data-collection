@@ -7,6 +7,7 @@ import datetime
 from dotenv import load_dotenv
 from w3lib.html import remove_tags
 from datetime import datetime
+import pycountry
 
 load_dotenv()
 
@@ -115,6 +116,9 @@ def job_to_tuple(job: dict):
         job.get("title", ""),  # title
         company,
         date_posted,  # date
+        pycountry.countries.get(
+            alpha_2=next(iter(job["locationMap"]))
+        ).name,  # location
         remove_tags(job.get("description", "")),  # desc
     )
 
@@ -132,8 +136,8 @@ def store_jobs(jobs: dict):
     cur = connection.cursor()
 
     insert_statement = """
-        INSERT INTO jobs (id, link, title, company, date_posted, description)
-        VALUES (%s, %s, %s, %s, %s, %s)
+        INSERT INTO jobs (id, link, title, company, date_posted, location, description)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (id) DO NOTHING;
     """
 
@@ -163,5 +167,5 @@ def run():
 
 if __name__ == "__main__":
     # run()
-    jobs = fetch_jobs(1, [])
+    jobs = fetch_jobs(1, ["se"])
     print(job_to_tuple(jobs[0]))

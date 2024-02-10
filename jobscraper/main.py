@@ -33,6 +33,7 @@ def init_database():
             title VARCHAR(255),
             company VARCHAR(255),
             date_posted VARCHAR(255),
+            location VARCHAR(255),
             description text,
             timestamp timestamp DEFAULT current_timestamp
         );

@@ -50,5 +50,6 @@ class Jobs24Spider(CrawlSpider):
         l.add_css("title", "h1.jobDetails__title")
         l.add_css("company", "p.jobDetails")
         l.add_css("date_posted", "p.small")
+        l.add_value("location", response.url)
         l.add_css("description", "div.jobDescription")
         return l.load_item()

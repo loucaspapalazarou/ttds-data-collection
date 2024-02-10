@@ -6,10 +6,6 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 BOT_NAME = "jobscraper"
 
@@ -92,7 +88,7 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     # "jobscraper.pipelines.JobscraperMongoPipeline": 300,
-    # "jobscraper.pipelines.JobscraperPostgresPipeline": 300,
+    "jobscraper.pipelines.JobscraperPostgresPipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -120,10 +116,3 @@ ITEM_PIPELINES = {
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
-
-# playwright
-# DOWNLOAD_HANDLERS = {
-#     "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
-#     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
-# }
-# TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
