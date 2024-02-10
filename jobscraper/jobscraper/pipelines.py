@@ -17,12 +17,12 @@ class JobscraperMongoPipeline:
     def __init__(self) -> None:
         settings = get_project_settings()
         self.connection = pymongo.MongoClient(
-            host=settings.get("MONGODB_HOSTNAME"),
-            port=settings.get("MONGODB_PORT"),
+            host=os.getenv("MONGODB_HOSTNAME"),
+            port=os.getenv("MONGODB_PORT"),
             server_api=ServerApi("1"),
         )
-        db = self.connection[settings.get("MONGODB_DBATABASE")]
-        self.collection = db[settings.get("MONGODB_COLLECTION")]
+        db = self.connection[os.getenv("MONGODB_DBATABASE")]
+        self.collection = db[os.getenv("MONGODB_COLLECTION")]
 
     def process_item(self, item, spider):
         # Prepare the filter and update document

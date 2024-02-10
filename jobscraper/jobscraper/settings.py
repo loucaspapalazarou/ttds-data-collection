@@ -92,20 +92,8 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     # "jobscraper.pipelines.JobscraperMongoPipeline": 300,
-    "jobscraper.pipelines.JobscraperPostgresPipeline": 300,
+    # "jobscraper.pipelines.JobscraperPostgresPipeline": 300,
 }
-
-MONGODB_HOSTNAME = os.getenv("MONGO_URI", "")
-MONGODB_PORT = 27017
-MONGODB_DBATABASE = "jobs_db"
-MONGODB_COLLECTION = "jobs"
-
-# PG_HOST = os.getenv("POSTGRES_HOST", "localhost")
-# PG_PORT = os.getenv("POSTGRES_PORT", 5432)
-# PG_USER = os.getenv("POSTGRES_USER")
-# PG_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-# PG_DATABASE = os.getenv("POSTGRES_DB")
-
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

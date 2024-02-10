@@ -5,6 +5,8 @@ import psycopg2
 import os
 import datetime
 from dotenv import load_dotenv
+from w3lib.html import remove_tags
+from datetime import datetime
 
 load_dotenv()
 
@@ -94,6 +96,29 @@ def fetch_jobs(page_num: int, locationCodes: list[str] = []) -> dict:
         return None
 
 
+def job_to_tuple(job: dict):
+    try:
+        company = job.get("employer", {}).get("name", "")  # company
+    except Exception:
+        company = ""
+
+    try:
+        timestamp = job["creationDate"] / 1000
+        date_posted = datetime.utcfromtimestamp(timestamp)
+        date_posted = date_posted.strftime("%d %b %Y")
+    except Exception:
+        date_posted = ""
+
+    return (
+        "europa-" + job.get("id", ""),  # id
+        f"https://europa.eu/eures/portal/jv-se/jv-details/{job.get('id', '')}?lang=en",  # link
+        job.get("title", ""),  # title
+        company,
+        date_posted,  # date
+        remove_tags(job.get("description", "")),  # desc
+    )
+
+
 def store_jobs(jobs: dict):
     if not jobs:
         return
@@ -114,44 +139,29 @@ def store_jobs(jobs: dict):
 
     for job in jobs:
         try:
-            data_tuple = (
-                "europa-" + job.get("id", ""),  # id
-                f"https://europa.eu/eures/portal/jv-se/jv-details/{job.get('id', '')}?lang=en",  # link
-                job.get("title", ""),  # title
-                job.get("employer", {}).get("name", ""),  # company
-                job.get("creationDate", ""),  # date
-                job.get("description", ""),  # desc
-            )
-
-            try:
-                cur.execute(insert_statement, data_tuple)
-                connection.commit()
-                print(data_tuple)
-            except Exception as e:
-                print(f"Error: {e}")
-                connection.rollback()
-        except Exception:
-            pass
+            data_tuple = job_to_tuple(job)
+            cur.execute(insert_statement, data_tuple)
+            connection.commit()
+            print(data_tuple)
+        except Exception as e:
+            print(f"Error: {e}")
+            connection.rollback()
 
 
-def main():
-    try:
-        with ThreadPoolExecutor() as executor:
-            futures = []
-            for location_code in LOCATION_CODES:
-                for page_num in range(1, MAX_PAGES):
-                    futures.append(
-                        executor.submit(
-                            fetch_jobs, page_num, locationCodes=[location_code]
-                        )
-                    )
-
-            for future in as_completed(futures):
-                jobs = future.result()
-                store_jobs(jobs)
-    except KeyboardInterrupt:
-        exit(0)
+def run():
+    with ThreadPoolExecutor() as executor:
+        futures = []
+        for location_code in LOCATION_CODES:
+            for page_num in range(1, MAX_PAGES):
+                futures.append(
+                    executor.submit(fetch_jobs, page_num, locationCodes=[location_code])
+                )
+        for future in as_completed(futures):
+            jobs = future.result()
+            store_jobs(jobs)
 
 
 if __name__ == "__main__":
-    main()
+    # run()
+    jobs = fetch_jobs(1, [])
+    print(job_to_tuple(jobs[0]))
