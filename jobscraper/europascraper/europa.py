@@ -166,6 +166,4 @@ def run():
 
 
 if __name__ == "__main__":
-    # run()
-    jobs = fetch_jobs(1, ["se"])
-    print(job_to_tuple(jobs[0]))
+    run()

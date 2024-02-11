@@ -33,6 +33,18 @@ cd jobscraper
 python main.py
 ```
 
+## Data
+
+The data is structured like so:
+
+- `id`: The job id, prefixed with the site it was collected from
+- `link`: The job's link
+- `title`: Job title
+- `company`: Company that posted the job
+- `location`: The best approximation of the job's location. Not always provided, and if so, it is assumed using the website context.
+- `date_posted`: The date that the job was posted
+- `timestamp`: Automatically added field in order to auto-delete entries older than 7 days.
+
 ## Notes
 
 - The code is split into 2 parts. The scrapy part collects data using the scrapy framework from various sites in the UK and one for the EU. The second part is a custom-made scraper for the official EU jobs website.
