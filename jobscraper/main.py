@@ -90,7 +90,7 @@ def main():
     except KeyboardInterrupt:
         return
 
-    timeout = 10
+    timeout = 12000
     process_jobscraper.join(timeout=timeout)
     process_europascraper.join(timeout=timeout)
 
