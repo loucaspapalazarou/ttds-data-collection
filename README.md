@@ -1,76 +1,44 @@
-# TTDS Data collection modeule
+# TTDS Data collection module
 
-The repository for the data collection part of the TTDS assignment. 
+This repository contains the code for the data collection part of the TTDS assignment.
 
-This repository includes 2 docker-compose files. One for testing, `docker-compose-dev.yml` and one for production `docker-compose-prod`.
+## Instructions
 
-Build
-```
-docker-compose -f docker-compose-<type>.yml build
-```
-
-and run
+The data is stored in a PostgreSQL instance running locally on Docker. To start the local instance:
 
 ```
-docker-compose -f docker-compose-<type>.yml up
+docker compose up -d
 ```
 
-## Development
+The credentials can be found in the `.env` file in the root repository. If you do not have one, copy the example:
 
-Inspect the stored documents using
-
-```
-docker exec -it ttds-data-collection_mongodb_1 mongosh
-```
-
-Then from the mongo shell
-
-```
-use jobs_db
-```
-
-Connt the documents
-
-```
-db.jobs.countDocuments()
-```
-
-### Production
-
-The production version stores the documents in a `mongodb` instance in a project I made. In order to conncet to the production db, you need a `mongo` account, preferably student account, of which I will invite in the project. When you do, message me so I can add your email to the project. When that is done, you will need to create user credentials. To do this, go in the `Security` section of the scrollbar and press `Quickstart`. Then, input your cretentials and create the user.
-
-![alt text](docs/create_credentals_quickstart.png)
-
-![alt text](docs/create_credentals.png)
-
-You will also need to provide your IP to the mongo instance so it accepts that connection. In the `Security` section, go to `Network Access` and add your IP address.
-
-To connect your local code with mondo you need a `.env` file. Copy the file
 
 ```
 cp .env.example .env
 ```
 
-Replace `<username>` and `<password>` with your credentials
-```
-MONGO_URI=mongodb+srv://<username>:<password>@ttds-cluster.vubotvd.mongodb.net/?retryWrites=true&w=majority
-```
+At a later stage, the credentials will be changed to reflect the remote database.
 
-And run the code using:
+To run the code (strongly suggest you use a virtual environment):
+
 ```
-docker-compose -f docker-compose-prod.yml up --build
+pip install -r requirements.txt
 ```
 
-If you don't want to use `docker` for the production, you can just run `main.py`. Just make sure you have the dependencies installed. 
+```
+cd jobscraper
+```
 
-Now the scraped jobs will be sent to the `mongo` instance.
+```
+python main.py
+```
 
-You can query the database using the [Mongo shell](https://www.mongodb.com/docs/mongodb-shell/) or [Python (pymongo)](https://www.mongodb.com/docs/drivers/pymongo/), or any other way you like.
+## Notes
 
-### TODO
-1. Make script that auto-deletes data that is older than a certain time, in order to not have outdated data in the db.
-2. Scrape Eurojobs
-3. Update README with postgres
-
-### NOTES
-1. europa.eu only allows 10k jobs. The backend api is setup this way
+- The code is split into 2 parts. The scrapy part collects data using the scrapy framework from various sites in the UK and one for the EU. The second part is a custom-made scraper for the official EU jobs website.
+  
+- Both are run in the `main.py` function using separate processes. Both store their data in the same PostgreSQL instance.
+  
+- If left alone, both scrapers will run for a long and unpredictable amount of time. Thus, a timeout of 12,000 seconds is set in the `main.py` file.
+  
+- Although the code can be run instantly using `main.py`, we can schedule the execution by providing the `-s` flag. This will schedule the task to run every day at 00:00.
