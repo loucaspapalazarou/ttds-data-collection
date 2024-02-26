@@ -13,6 +13,12 @@ MAX_PAGES = 200
 
 
 def init_session() -> requests.Session:
+    """
+    Initialize a session with Europa website.
+
+    Returns:
+        requests.Session: A session object.
+    """
     session = requests.Session()
     # get an unprotected route in order to get the cookies
     session.get(
@@ -22,6 +28,16 @@ def init_session() -> requests.Session:
 
 
 def fetch_jobs(page_num: int, locationCodes: list[str] = []) -> dict:
+    """
+    Fetch job vacancies from Europa website.
+
+    Args:
+        page_num (int): Page number to fetch.
+        locationCodes (list): List of location codes to filter job vacancies.
+
+    Returns:
+        dict: Job vacancies data.
+    """
     session = init_session()
     url = "https://europa.eu/eures/eures-apps/searchengine/page/jv-search/search"
     cookies = session.cookies.get_dict()
@@ -60,6 +76,15 @@ def fetch_jobs(page_num: int, locationCodes: list[str] = []) -> dict:
 
 
 def job_to_tuple(job: dict):
+    """
+    Convert job data to a tuple.
+
+    Args:
+        job (dict): Job data dictionary.
+
+    Returns:
+        tuple: Tuple containing job data.
+    """
     # Extracting company name
     company = job.get("employer", {}).get("name", "")
 
@@ -91,6 +116,12 @@ def job_to_tuple(job: dict):
 
 
 def store_jobs(jobs: dict):
+    """
+    Store jobs in the database.
+
+    Args:
+        jobs (dict): Job vacancies data dictionary.
+    """
     if not jobs:
         return
 
@@ -101,6 +132,9 @@ def store_jobs(jobs: dict):
 
 
 def run():
+    """
+    Run the Europascraper module to fetch and store job vacancies.
+    """
     try:
         with ThreadPoolExecutor() as executor:
             futures = []

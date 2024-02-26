@@ -1,10 +1,15 @@
-# Responsible for db modifications
 import psycopg2
 from constants import CONSTANTS
 
 
 def init_database():
-    # Connect to the specific database
+    """
+    Initialize the database.
+
+    This function connects to the PostgreSQL database specified in the constants module
+    and creates a 'jobs' table if it doesn't exist already.
+
+    """
     connection = psycopg2.connect(
         host=CONSTANTS["postgres_host"],
         user=CONSTANTS["postgres_user"],
@@ -28,25 +33,6 @@ def init_database():
         );
         """
     )
-    # Create the trigger function
-    cursor.execute(
-        f"""
-        CREATE OR REPLACE FUNCTION delete_old_rows()
-        RETURNS TRIGGER AS $$
-        BEGIN
-            DELETE FROM jobs WHERE timestamp < NOW() - INTERVAL '{CONSTANTS["deletion_interval"]}';
-            RETURN NULL;
-        END;
-        $$ LANGUAGE plpgsql;
-        """
-    )
-    cursor.execute(
-        f"""
-        CREATE OR REPLACE TRIGGER delete_old_rows_trigger
-        AFTER INSERT ON jobs
-        EXECUTE FUNCTION delete_old_rows();
-        """
-    )
 
     connection.commit()
     cursor.close()
@@ -54,6 +40,13 @@ def init_database():
 
 
 def insert(data_tuple):
+    """
+    Insert data into the 'jobs' table.
+
+    Args:
+        data_tuple (tuple): A tuple containing data to be inserted into the 'jobs' table.
+
+    """
     connection = psycopg2.connect(
         host=CONSTANTS["postgres_host"],
         user=CONSTANTS["postgres_user"],
@@ -77,3 +70,28 @@ def insert(data_tuple):
     finally:
         cur.close()
         connection.close()
+
+
+def remove_old_entries():
+    """
+    Remove old entries from the 'jobs' table.
+
+    This function deletes rows from the 'jobs' table where the timestamp is older than the deletion interval
+    specified in the constants module.
+
+    """
+    connection = psycopg2.connect(
+        host=CONSTANTS["postgres_host"],
+        user=CONSTANTS["postgres_user"],
+        password=CONSTANTS["postgres_password"],
+        dbname=CONSTANTS["postgres_db"],
+    )
+    cur = connection.cursor()
+    cur.execute(
+        f"""
+    DELETE FROM jobs WHERE timestamp < NOW() - INTERVAL '{CONSTANTS["deletion_interval"]}';    
+    """
+    )
+    connection.commit()
+    cur.close()
+    connection.close()
