@@ -1,3 +1,7 @@
+# UPDATE
+- update to reflect current code
+- start cloud db instance and instructions 
+
 # TTDS Data collection module
 
 This repository contains the code for the data collection part of the TTDS assignment.

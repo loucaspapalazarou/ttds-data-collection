@@ -12,6 +12,8 @@ BOT_NAME = "jobscraper"
 SPIDER_MODULES = ["jobscraper.spiders"]
 NEWSPIDER_MODULE = "jobscraper.spiders"
 
+# USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"
+
 USER_AGENTS = [
     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
     "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)",
@@ -88,7 +90,7 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     # "jobscraper.pipelines.JobscraperMongoPipeline": 300,
-    "jobscraper.pipelines.JobscraperPostgresPipeline": 300,
+    # "jobscraper.pipelines.JobscraperPostgresPipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

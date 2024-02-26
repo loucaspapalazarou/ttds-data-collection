@@ -57,7 +57,7 @@ def run_removal_task():
         time.sleep(10)
 
 
-def main():
+def _main():
     """
     Main function to initialize and start multiple processes for running different tasks.
     """
@@ -98,6 +98,13 @@ def main():
         process_europascraper.terminate()
     if process_removal.is_alive():
         process_removal.terminate()
+
+
+def main():
+    try:
+        _main()
+    except Exception:
+        pass
 
 
 if __name__ == "__main__":
