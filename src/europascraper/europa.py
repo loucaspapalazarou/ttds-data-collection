@@ -5,11 +5,44 @@ import pycountry
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import datetime
 import random
-from constants import LOCATION_CODES
 from db import db
 
 RESULTS_PER_PAGE = 50
 MAX_PAGES = 200
+
+LOCATION_CODES = [
+    "at",
+    "be",
+    "bg",
+    "ch",
+    "cy",
+    "cz",
+    "de",
+    "dk",
+    "ee",
+    "el",
+    "es",
+    "fi",
+    "fr",
+    "hr",
+    "hu",
+    "ie",
+    "is",
+    "it",
+    "li",
+    "lt",
+    "lu",
+    "lv",
+    "mt",
+    "nl",
+    "no",
+    "pl",
+    "pt",
+    "ro",
+    "se",
+    "si",
+    "sk",
+]
 
 
 def init_session() -> requests.Session:

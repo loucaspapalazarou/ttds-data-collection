@@ -47,7 +47,16 @@ The data is structured like so:
 - `company`: Company that posted the job
 - `location`: The best approximation of the job's location. Not always provided, and if so, it is assumed using the website context.
 - `date_posted`: The date that the job was posted
-- `timestamp`: Automatically added field in order to auto-delete entries older than 7 days.
+- `timestamp`: Automatically added field in order to auto-delete entries older than X amount of days.
+
+## Constants
+
+The `src/` directory contains the file `constants.py`. This file contains all the constants used in the code. These include: 
+
+- Loading and handling of the database credentials
+- The `scrape_duration` which denotes the amount of time that the code wil run for.
+- The `scrape_time` which denotes the time of day that the code will be run.
+- The `deletion_interval` denotes how old an entry should be for it to be removed from the database.
 
 ## Notes
 
@@ -55,6 +64,6 @@ The data is structured like so:
   
 - Both are run in the `main.py` function using separate processes. Both store their data in the same PostgreSQL instance.
   
-- If left alone, both scrapers will run for a long and unpredictable amount of time. Thus, a timeout of 12,000 seconds is set in the `main.py` file.
+- If left alone, both scrapers will run for a long and unpredictable amount of time. Thus, a timeout of 14,400 seconds (=4 hours) is set in the `constants.py` file.
   
-- Although the code can be run instantly using `main.py`, we can schedule the execution by providing the `-s` flag. This will schedule the task to run every day at 00:00.
+- Although the code can be run instantly using `main.py`, we can schedule the execution by providing the `-s` flag. This will schedule the task to run every day at the time specified in the `constants.py` file.
