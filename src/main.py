@@ -31,19 +31,27 @@ def run_jobscraper():
     """
     Run the job scraper by initializing and starting the Scrapy process for each spider defined in the project settings.
     """
-    settings = get_project_settings()
-    spider_loader = SpiderLoader.from_settings(settings)
-    process = CrawlerProcess(settings)
-    for spider_name in spider_loader.list():
-        process.crawl(spider_name)
-    process.start()
+    try:
+        settings = get_project_settings()
+        spider_loader = SpiderLoader.from_settings(settings)
+        process = CrawlerProcess(settings)
+        for spider_name in spider_loader.list():
+            process.crawl(spider_name)
+        process.start()
+    except Exception as e:
+        logging.error(f"Error occurred in job scraper: {e}")
+        exit(1)
 
 
 def run_europascraper():
     """
     Run the Europascraper module.
     """
-    europa.run()
+    try:
+        europa.run()
+    except Exception as e:
+        logging.error(f"Error occurred in Europascraper: {e}")
+        exit(1)
 
 
 def _main():

@@ -90,7 +90,7 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     # "jobscraper.pipelines.JobscraperMongoPipeline": 300,
-    # "jobscraper.pipelines.JobscraperPostgresPipeline": 300,
+    "jobscraper.pipelines.JobscraperPostgresPipeline": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
