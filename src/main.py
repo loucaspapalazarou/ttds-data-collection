@@ -46,37 +46,23 @@ def run_europascraper():
     europa.run()
 
 
-def run_removal_task():
-    """
-    Run the removal task scheduled to execute daily to remove old entries from the database.
-    """
-    schedule.every().day.at(CONSTANTS["scrape_time"]).do(db.remove_old_entries)
-    logging.info(f"Deleting old rows every day at {CONSTANTS['scrape_time']} AM.")
-    while True:
-        schedule.run_pending()
-        time.sleep(10)
-
-
 def _main():
     """
     Main function to initialize and start multiple processes for running different tasks.
     """
     db.init_database()
 
-    # Start both scrapers as separate processes
+    # Start both scrapers and the removal module
     process_jobscraper = multiprocessing.Process(target=run_jobscraper)
     process_europascraper = multiprocessing.Process(target=run_europascraper)
-    process_removal = multiprocessing.Process(target=run_removal_task)
 
     # Define a signal handler for SIGINT (Ctrl+C)
     def signal_handler(sig, frame):
         logging.info("Received Ctrl+C. Terminating processes...")
         process_jobscraper.terminate()
         process_europascraper.terminate()
-        process_removal.terminate()
         process_jobscraper.join()
         process_europascraper.join()
-        process_removal.join()
         logging.info("Processes terminated.")
         exit(0)
 
@@ -84,27 +70,32 @@ def _main():
 
     process_jobscraper.start()
     process_europascraper.start()
-    process_removal.start()
 
-    timeout = CONSTANTS["scrape_duration"]
-    process_jobscraper.join(timeout=timeout)
-    process_europascraper.join(timeout=timeout)
-    process_removal.join(timeout=timeout)
+    process_jobscraper.join(timeout=CONSTANTS["scrape_duration"])
+    process_europascraper.join(timeout=CONSTANTS["scrape_duration"])
 
     # Check if any process is still alive and terminate if necessary
     if process_jobscraper.is_alive():
         process_jobscraper.terminate()
     if process_europascraper.is_alive():
         process_europascraper.terminate()
-    if process_removal.is_alive():
-        process_removal.terminate()
+
+    # When the scraping is done, run the removal task once to remove entries
+    # older than the interval specified in constants.py
+    db.remove_old_entries()
+
+    # When the scraping eventually finishes, start the index creation
+    # code...
 
 
 def main():
+    """
+    Wrapper around main to prevent any crashes
+    """
     try:
         _main()
-    except Exception:
-        pass
+    except Exception as e:
+        logging.error(e)
 
 
 if __name__ == "__main__":
