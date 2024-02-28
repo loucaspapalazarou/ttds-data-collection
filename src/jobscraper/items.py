@@ -6,7 +6,7 @@
 import scrapy
 from itemloaders.processors import MapCompose, TakeFirst
 from w3lib.html import remove_tags
-from .utils import jobs24, cvlibrary, eurojobs
+from .utils import jobs24, eurojobs
 
 
 class Jobs24Item(scrapy.Item):
