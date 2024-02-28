@@ -2,6 +2,20 @@ import psycopg2
 from constants import CONSTANTS
 
 
+def _create_db_connection():
+    """
+    Create a db connection
+
+    returns: A db connection object
+    """
+    return psycopg2.connect(
+        host=CONSTANTS["postgres_host"],
+        user=CONSTANTS["postgres_user"],
+        password=CONSTANTS["postgres_password"],
+        dbname=CONSTANTS["postgres_db"],
+    )
+
+
 def init_database():
     """
     Initialize the database.
@@ -10,12 +24,7 @@ def init_database():
     and creates a 'jobs' table if it doesn't exist already.
 
     """
-    connection = psycopg2.connect(
-        host=CONSTANTS["postgres_host"],
-        user=CONSTANTS["postgres_user"],
-        password=CONSTANTS["postgres_password"],
-        dbname=CONSTANTS["postgres_db"],
-    )
+    connection = _create_db_connection()
     cursor = connection.cursor()
 
     # Create table if it doesn't exist
@@ -47,12 +56,7 @@ def insert(data_tuple):
         data_tuple (tuple): A tuple containing data to be inserted into the 'jobs' table.
 
     """
-    connection = psycopg2.connect(
-        host=CONSTANTS["postgres_host"],
-        user=CONSTANTS["postgres_user"],
-        password=CONSTANTS["postgres_password"],
-        dbname=CONSTANTS["postgres_db"],
-    )
+    connection = _create_db_connection()
     cur = connection.cursor()
 
     insert_statement = """
@@ -80,17 +84,12 @@ def remove_old_entries():
     specified in the constants module.
 
     """
-    connection = psycopg2.connect(
-        host=CONSTANTS["postgres_host"],
-        user=CONSTANTS["postgres_user"],
-        password=CONSTANTS["postgres_password"],
-        dbname=CONSTANTS["postgres_db"],
-    )
+    connection = _create_db_connection()
     cur = connection.cursor()
     cur.execute(
         f"""
-    DELETE FROM jobs WHERE timestamp < NOW() - INTERVAL '{CONSTANTS["deletion_interval"]}';    
-    """
+        DELETE FROM jobs WHERE timestamp < NOW() - INTERVAL '{CONSTANTS["deletion_interval"]}';    
+        """
     )
     connection.commit()
     cur.close()

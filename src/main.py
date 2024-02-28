@@ -96,6 +96,7 @@ def main():
         _main()
     except Exception as e:
         logging.error(e)
+        logging.debug("Will resume on the next scrape")
 
 
 if __name__ == "__main__":
