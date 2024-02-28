@@ -43,39 +43,6 @@ class Jobs24Item(scrapy.Item):
     )
 
 
-class CVLibraryItem(scrapy.Item):
-    id = scrapy.Field(
-        input_processor=MapCompose(cvlibrary.mark_cvlibrary),
-        output_processor=TakeFirst(),
-    )
-    link = scrapy.Field(
-        input_processor=MapCompose(cvlibrary.clean_link),
-        output_processor=TakeFirst(),
-    )
-    title = scrapy.Field(
-        input_processor=MapCompose(remove_tags, cvlibrary.clean_data),
-        output_processor=TakeFirst(),
-    )
-    company = scrapy.Field(
-        input_processor=MapCompose(remove_tags, cvlibrary.clean_data),
-        output_processor=TakeFirst(),
-    )
-    location = scrapy.Field(
-        input_processor=MapCompose(),
-        output_processor=TakeFirst(),
-    )
-    description = scrapy.Field(
-        input_processor=MapCompose(
-            lambda x: remove_tags(x, keep=["br", "p"]), cvlibrary.clean_data
-        ),
-        output_processor=TakeFirst(),
-    )
-    date_posted = scrapy.Field(
-        input_processor=MapCompose(remove_tags, cvlibrary.clean_data),
-        output_processor=TakeFirst(),
-    )
-
-
 class EurojobsItem(scrapy.Item):
     id = scrapy.Field(
         input_processor=MapCompose(eurojobs.mark_eurojobs),
