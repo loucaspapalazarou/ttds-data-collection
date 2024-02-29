@@ -21,6 +21,7 @@ import schedule
 
 from europascraper import europa
 from db import db
+from index import index_update
 from constants import CONSTANTS
 
 # Prepare the logger
@@ -93,7 +94,7 @@ def _main():
     db.remove_old_entries()
 
     # When the scraping eventually finishes, start the index creation
-    # code...
+    index_update.create_index()
 
 
 def main():
