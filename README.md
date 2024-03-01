@@ -47,6 +47,7 @@ The data is structured like so:
 - `company`: Company that posted the job
 - `location`: The best approximation of the job's location. Not always provided, and if so, it is assumed using the website context.
 - `date_posted`: The date that the job was posted
+- `description`: The job listing description
 - `timestamp`: Automatically added field in order to auto-delete entries older than X amount of days.
 
 ## Constants
