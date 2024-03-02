@@ -10,7 +10,7 @@ from .utils import jobs24, eurojobs
 
 
 class Jobs24Item(scrapy.Item):
-    id = scrapy.Field(
+    job_id = scrapy.Field(
         input_processor=MapCompose(jobs24.url_to_id),
         output_processor=TakeFirst(),
     )
@@ -44,7 +44,7 @@ class Jobs24Item(scrapy.Item):
 
 
 class EurojobsItem(scrapy.Item):
-    id = scrapy.Field(
+    job_id = scrapy.Field(
         input_processor=MapCompose(eurojobs.mark_eurojobs),
         output_processor=TakeFirst(),
     )

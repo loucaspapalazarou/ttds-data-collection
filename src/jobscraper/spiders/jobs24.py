@@ -45,7 +45,7 @@ class Jobs24Spider(CrawlSpider):
 
     def parse_item(self, response):
         l = ItemLoader(item=Jobs24Item(), response=response)
-        l.add_value("id", response.url)
+        l.add_value("job_id", response.url)
         l.add_value("link", response.url)
         l.add_css("title", "h1.jobDetails__title")
         l.add_css("company", "p.jobDetails")

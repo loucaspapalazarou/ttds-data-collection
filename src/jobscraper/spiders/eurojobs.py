@@ -16,7 +16,7 @@ class EurojobsSpider(CrawlSpider):
 
     def parse_item(self, response):
         l = ItemLoader(item=EurojobsItem(), response=response)
-        l.add_value("id", response.url.split("/")[5])
+        l.add_value("job_id", response.url.split("/")[5])
         l.add_value("link", response.url)
         l.add_css("title", "h2")
         l.add_css("company", "span.company-name")

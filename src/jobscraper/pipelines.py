@@ -73,7 +73,7 @@ class JobscraperPostgresPipeline:
     """
 
     def __init__(self) -> None:
-        pass
+        db.init_database()
 
     def process_item(self, item, spider):
         """
@@ -87,7 +87,7 @@ class JobscraperPostgresPipeline:
             The processed item.
         """
         data_tuple = (
-            item.get("id", ""),
+            item.get("job_id", ""),
             item.get("link", ""),
             item.get("title", ""),
             item.get("company", ""),
