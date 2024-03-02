@@ -63,7 +63,7 @@ def insert(data_tuple):
     insert_statement = """
         INSERT INTO jobs (job_id, link, title, company, date_posted, location, description)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
-        ON CONFLICT (id) DO NOTHING;
+        ON CONFLICT (job_id) DO NOTHING;
         """
 
     try:
