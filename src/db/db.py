@@ -31,7 +31,8 @@ def init_database():
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS jobs(
-            id text PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
+            job_id VARCHAR(255),
             link VARCHAR(255),
             title VARCHAR(255),
             company VARCHAR(255),
@@ -60,7 +61,7 @@ def insert(data_tuple):
     cur = connection.cursor()
 
     insert_statement = """
-        INSERT INTO jobs (id, link, title, company, date_posted, location, description)
+        INSERT INTO jobs (job_id, link, title, company, date_posted, location, description)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (id) DO NOTHING;
         """
