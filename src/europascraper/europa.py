@@ -168,6 +168,7 @@ def run():
     """
     Run the Europascraper module to fetch and store job vacancies.
     """
+    db.init_database()
     try:
         with ThreadPoolExecutor() as executor:
             futures = []
