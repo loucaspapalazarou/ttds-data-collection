@@ -1,15 +1,21 @@
 import requests
 import json
-from w3lib.html import remove_tags
 import pycountry
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
 import datetime
 import random
+import signal
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from db import db
+import re
 
 RESULTS_PER_PAGE = 50
 MAX_PAGES = 200
-
+TAG_RE = re.compile(r"<[^>]+>")
 LOCATION_CODES = [
     "at",
     "be",
@@ -43,6 +49,19 @@ LOCATION_CODES = [
     "si",
     "sk",
 ]
+
+
+def preprocess_text(value: str):
+    return " ".join(
+        TAG_RE.sub(" ", value)
+        .replace("&nbsp;", " ")
+        .replace("\xa0", " ")
+        .replace("\t", "")
+        .replace("\r", "")
+        .replace("\n", "")
+        .strip()
+        .split()
+    )
 
 
 def init_session() -> requests.Session:
@@ -119,7 +138,10 @@ def job_to_tuple(job: dict):
         tuple: Tuple containing job data.
     """
     # Extracting company name
-    company = job.get("employer", {}).get("name", "")
+    try:
+        company = job.get("employer", {}).get("name", "")
+    except Exception:
+        company = ""
 
     # Extracting date posted
     try:
@@ -129,22 +151,20 @@ def job_to_tuple(job: dict):
         date_posted = ""
 
     # Extracting location
-    location = ""
     try:
         location_code = next(iter(job.get("locationMap", {})))
-        location_name = pycountry.countries.get(alpha_2=location_code).name
-        location = location_name
-    except Exception as e:
-        pass
+        location = pycountry.countries.get(alpha_2=location_code).name
+    except Exception:
+        location = ""
 
     return (
         "europa-" + job.get("id", ""),
         f"https://europa.eu/eures/portal/jv-se/jv-details/{job.get('id', '')}?lang=en",
-        remove_tags(job.get("title", "")),
+        preprocess_text(job.get("title", "")),
         company,
         date_posted,
         location,
-        remove_tags(job.get("description", "")),
+        preprocess_text(job.get("description", "")),
     )
 
 
@@ -161,27 +181,37 @@ def store_jobs(jobs: dict):
     for job in jobs:
         data_tuple = job_to_tuple(job)
         db.insert(data_tuple)
-        print(data_tuple)
+        print(data_tuple, "\n")
 
 
 def run():
     """
     Run the Europascraper module to fetch and store job vacancies.
     """
+    cancel_event = threading.Event()
+
+    def signal_handler(sig, frame):
+        print("Ctrl+C pressed. Cancelling execution.")
+        cancel_event.set()
+
+    signal.signal(signal.SIGINT, signal_handler)
+
     db.init_database()
-    try:
-        with ThreadPoolExecutor() as executor:
-            futures = []
-            random.shuffle(LOCATION_CODES)
-            for location_code in LOCATION_CODES:
-                for page_num in range(1, MAX_PAGES):
-                    futures.append(
-                        executor.submit(
-                            fetch_jobs, page_num, locationCodes=[location_code]
-                        )
-                    )
-            for future in as_completed(futures):
-                jobs = future.result()
-                store_jobs(jobs)
-    except KeyboardInterrupt:
-        exit()
+    with ThreadPoolExecutor() as executor:
+        futures = []
+        random.shuffle(LOCATION_CODES)
+        for location_code in LOCATION_CODES:
+            for page_num in range(1, MAX_PAGES):
+                futures.append(
+                    executor.submit(fetch_jobs, page_num, locationCodes=[location_code])
+                )
+        for future in as_completed(futures):
+            if cancel_event.is_set():
+                executor.shutdown(wait=False, cancel_futures=True)
+                return
+            jobs = future.result()
+            store_jobs(jobs)
+
+
+if __name__ == "__main__":
+    run()
