@@ -52,6 +52,15 @@ LOCATION_CODES = [
 
 
 def preprocess_text(value: str):
+    """
+    The default preprocessing function.
+
+    Args:
+        value (str): The string to process
+
+    Returns:
+        The updated string
+    """
     return " ".join(
         TAG_RE.sub(" ", value)
         .replace("&nbsp;", " ")

@@ -10,6 +10,3 @@ sudo apt install python3-pip -y
 if [ ! -f .env ]; then
     cp .env.example .env
 fi
-
-cd ~/ttds-data-collection
-sudo docker-compose up -d
