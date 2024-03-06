@@ -17,6 +17,7 @@ from scrapy.utils.project import get_project_settings
 from pymongo.server_api import ServerApi
 from constants import CONSTANTS
 from db import db
+from indexer.indexer import update_remote_index_individual
 
 
 class JobscraperMongoPipeline:
@@ -95,6 +96,8 @@ class JobscraperPostgresPipeline:
             item.get("location", ""),
             item.get("description", ""),
         )
-
-        db.insert(data_tuple)
+        
+        doc_id=db.insert(data_tuple)
+        if doc_id:
+            update_remote_index_individual(data_tuple, doc_id)
         return item
